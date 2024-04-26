@@ -1,0 +1,136 @@
+---
+title: "eda project"
+author: "22MIA1087,22MIA1048,22MIA1099"
+date: "2024-03-20"
+output:
+  word_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+
+```{r}
+file_path <- "C:/Users/Divya/Downloads/teslaa.csv"
+df <- read.csv(file_path)
+head(df,5)
+
+```
+```{r}
+d=na.omit(df);
+head(d,5)
+```
+
+```{r}
+d$High <- NA
+head(df,5)
+
+```
+```{r}
+#missing data
+df_clean <- df[, colSums(is.na(df)) == 0]
+df_clean <- df[complete.cases(df), ]
+```
+
+
+```{r}
+head(df_clean,5)
+```
+```{r}
+summary_stats <- summary(df)
+```
+
+
+```{r}
+head(summary_stats,5)
+```
+
+
+```{r}
+numeric_data <- df[sapply(df, is.numeric)]
+head(numeric_data,5)
+```
+```{r}
+#summary of the statistics
+summary_stats <- summary(numeric_data)
+head(summary_stats,5)
+
+```
+```{r}
+#mean
+mean_values <- colMeans(numeric_data, na.rm = TRUE)
+head(mean_values,5)
+```
+```{r}
+#median
+median_values <- apply(numeric_data, 2, median, na.rm = TRUE)
+head(median_values,5)
+
+```
+```{r}
+#standard deviation
+sd_values <- apply(numeric_data, 2, sd, na.rm = TRUE)
+head(sd_values,5)
+```
+```{r}
+#minimum values
+min_values <- apply(numeric_data, 2, min, na.rm = TRUE)
+head(min_values,5)
+
+```
+
+```{r}
+#maximum values
+max_values <- apply(numeric_data, 2, max, na.rm = TRUE)
+head(max_values,5)
+```
+
+```{r}
+# Quantiles (e.g., 25th, 50th, and 75th percentiles)
+quantiles <- apply(numeric_data, 2, quantile, na.rm = TRUE)
+head(quantiles,5)
+```
+```{r}
+# Calculate variance for each column
+variance <- apply(numeric_data, 2, var, na.rm = TRUE)
+head(variance,5)
+```
+```{r}
+#Outlier detection
+detect_outliers_zscore <- function(x, threshold = 3) {
+  z_scores <- scale(x)
+  outliers <- abs(z_scores) > threshold
+  return(outliers)
+}
+outliers <- apply(numeric_data[sapply(numeric_data, is.numeric)], 2, detect_outliers_zscore)
+outlier_indices <- which(outliers, arr.ind = TRUE)
+head(outlier_indices,5)
+```
+```{r}
+#Log Transformation
+df$log_feature <- log(df$High)
+head(df$log_feature,5)
+```
+```{r}
+#Polynomial Features
+df$polynomial_feature <- df$Low^2
+head(df$polynomial_feature,5)
+```
+```{r}
+#Normalization/Scaling
+scaled_data <- scale(df$Volume)
+head(scaled_data,5)
+```
+```{r}
+```
+
+
+```{r}
+#box plot
+print(boxplot(df$High))
+
+```
+
